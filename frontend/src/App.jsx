@@ -3,10 +3,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Resources from './pages/Resources';
-import ServiceCatalog from './pages/ServiceCatalog';  // Add this import
+import ServiceCatalog from './pages/ServiceCatalog';
 import Layout from './components/Layout';
 import Documentation from './pages/Documentation';
-
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -67,9 +66,9 @@ const App = () => {
         path="/docs"
         element={
           <ProtectedRoute>
-          <Documentation />
-           </ProtectedRoute>
-       }
+            <Documentation />
+          </ProtectedRoute>
+        }
       />
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
     </Routes>

@@ -13,10 +13,15 @@ import {
   CheckCircle,
   AlertTriangle
 } from 'lucide-react';
+import DocumentForm from './DocumentForm';
+import DocumentView from './DocumentView';
 
 const Documentation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const docs = [
     {
@@ -94,6 +99,30 @@ const Documentation = () => {
     return matchesSearch && matchesCategory;
   });
 
+  const handleCreate = () => {
+    setIsCreating(true);
+    setSelectedDoc(null);
+  };
+
+  const handleEdit = (doc) => {
+    setIsEditing(true);
+    setSelectedDoc(doc);
+  };
+
+  const handleSubmit = (doc) => {
+    // Handle form submission (create/edit)
+    console.log('Submitted:', doc);
+    setIsCreating(false);
+    setIsEditing(false);
+    setSelectedDoc(null);
+  };
+
+  const handleCancel = () => {
+    setIsCreating(false);
+    setIsEditing(false);
+    setSelectedDoc(null);
+  };
+
   return (
     <div>
       {/* Header Actions */}
@@ -109,7 +138,10 @@ const Documentation = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button 
+            onClick={handleCreate}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
             Add Documentation
           </button>
         </div>
@@ -137,90 +169,95 @@ const Documentation = () => {
           </nav>
         </div>
 
-        {/* Documentation List */}
+        {/* Documentation Content */}
         <div className="flex-1">
-          <div className="grid gap-6">
-            {filteredDocs.map((doc) => (
-              <div key={doc.id} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-                {/* Document Header */}
-                <div className="flex justify-between items-start">
-                  <div className="flex items-start space-x-4">
-                    <BookOpen className="w-6 h-6 text-blue-500" />
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{doc.title}</h3>
-                      <p className="text-gray-600">{doc.description}</p>
+          {isCreating && (
+            <DocumentForm onSubmit={handleSubmit} onCancel={handleCancel} />
+          )}
+
+          {isEditing && selectedDoc && (
+            <DocumentForm doc={selectedDoc} onSubmit={handleSubmit} onCancel={handleCancel} />
+          )}
+
+          {selectedDoc && !isEditing && (
+            <DocumentView doc={selectedDoc} onEdit={handleEdit} />
+          )}
+
+          {!isCreating && !isEditing && !selectedDoc && (
+            <div className="grid gap-6">
+              {filteredDocs.map((doc) => (
+                <div 
+                  key={doc.id} 
+                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => setSelectedDoc(doc)}
+                >
+                  {/* Document Header */}
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-start space-x-4">
+                      <BookOpen className="w-6 h-6 text-blue-500" />
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">{doc.title}</h3>
+                        <p className="text-gray-600">{doc.description}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {getStatusIcon(doc.status)}
+                      <span className="text-sm font-medium text-gray-500">{doc.version}</span>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    {getStatusIcon(doc.status)}
-                    <span className="text-sm font-medium text-gray-500">{doc.version}</span>
-                  </div>
-                </div>
 
-                {/* Metadata */}
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                  <div>
-                    <div className="text-sm text-gray-500">Type</div>
-                    <div className="mt-1 text-sm font-medium">{doc.type}</div>
+                  {/* Metadata */}
+                  <div className="mt-4 grid grid-cols-3 gap-4">
+                    <div>
+                      <div className="text-sm text-gray-500">Type</div>
+                      <div className="mt-1 text-sm font-medium">{doc.type}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-500">Last Updated</div>
+                      <div className="mt-1 text-sm font-medium">{doc.lastUpdated}</div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-500">Author</div>
+                      <div className="mt-1 text-sm font-medium">{doc.author}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Last Updated</div>
-                    <div className="mt-1 text-sm font-medium">{doc.lastUpdated}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Author</div>
-                    <div className="mt-1 text-sm font-medium">{doc.author}</div>
-                  </div>
-                </div>
 
-                {/* Tags */}
-                <div className="mt-4">
-                  <div className="flex flex-wrap gap-2">
-                    {doc.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                      >
-                        <Tag className="w-3 h-3 mr-1" />
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Content Preview */}
-                {doc.endpoints && (
-                  <div className="mt-4 bg-gray-50 rounded-lg p-4">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">API Endpoints</h4>
-                    <div className="space-y-2">
-                      {doc.endpoints.map((endpoint, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <span className="text-sm">
-                            <span className="font-mono text-blue-600">{endpoint.method}</span>
-                            <span className="text-gray-600 ml-2">{endpoint.path}</span>
-                          </span>
-                          <span className="text-sm text-gray-500">{endpoint.description}</span>
-                        </div>
+                  {/* Tags */}
+                  <div className="mt-4">
+                    <div className="flex flex-wrap gap-2">
+                      {doc.tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                        >
+                          <Tag className="w-3 h-3 mr-1" />
+                          {tag}
+                        </span>
                       ))}
                     </div>
                   </div>
-                )}
 
-                {/* Actions */}
-                <div className="mt-6 pt-4 border-t border-gray-200 flex justify-end space-x-3">
-                  <button className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
-                    View Full Documentation
-                  </button>
-                  <button className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors">
-                    Edit
-                  </button>
-                  <button className="px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-md transition-colors">
-                    Download
-                  </button>
+                  {/* Content Preview */}
+                  {doc.endpoints && (
+                    <div className="mt-4 bg-gray-50 rounded-lg p-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">API Endpoints</h4>
+                      <div className="space-y-2">
+                        {doc.endpoints.map((endpoint, index) => (
+                          <div key={index} className="flex items-center justify-between">
+                            <span className="text-sm">
+                              <span className="font-mono text-blue-600">{endpoint.method}</span>
+                              <span className="text-gray-600 ml-2">{endpoint.path}</span>
+                            </span>
+                            <span className="text-sm text-gray-500">{endpoint.description}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

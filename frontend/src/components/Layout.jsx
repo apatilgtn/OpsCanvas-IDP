@@ -8,7 +8,8 @@ import {
   Users,
   Shield,
   Settings,
-  Server
+  Server,
+  Book
 } from 'lucide-react';
 import Header from './header/Header';
 
@@ -17,13 +18,14 @@ const Layout = ({ children }) => {
 
   const menuItems = [
     { icon: LayoutDashboard, text: 'Overview', path: '/dashboard' },
-    { icon: Server, text: 'Service Catalog', path: '/catalog', count: '2' },  // Add this item
+    { icon: Server, text: 'Service Catalog', path: '/catalog', count: '2' },
     { icon: Package, text: 'Components', path: '/components', count: '3' },
     { icon: Code, text: 'APIs', path: '/apis', count: '2' },
     { icon: Database, text: 'Resources', path: '/resources', count: '2' },
     { icon: Package, text: 'Systems', path: '/systems', count: '2' },
     { icon: Users, text: 'Teams', path: '/teams' },
     { icon: Shield, text: 'Security', path: '/security' },
+    { icon: Book, text: 'Documentation', path: '/docs' },
     { icon: Settings, text: 'Settings', path: '/settings' }
   ];
 
@@ -42,6 +44,8 @@ const Layout = ({ children }) => {
         return 'Manage and monitor your infrastructure resources';
       case '/catalog':
         return 'Browse and manage all services and applications';
+      case '/docs':
+        return 'Access and manage platform documentation';
       default:
         return 'Manage your platform components and services';
     }
