@@ -7,7 +7,8 @@ import {
   Package,
   Users,
   Shield,
-  Settings
+  Settings,
+  Server
 } from 'lucide-react';
 import Header from './header/Header';
 
@@ -16,6 +17,7 @@ const Layout = ({ children }) => {
 
   const menuItems = [
     { icon: LayoutDashboard, text: 'Overview', path: '/dashboard' },
+    { icon: Server, text: 'Service Catalog', path: '/catalog', count: '2' },  // Add this item
     { icon: Package, text: 'Components', path: '/components', count: '3' },
     { icon: Code, text: 'APIs', path: '/apis', count: '2' },
     { icon: Database, text: 'Resources', path: '/resources', count: '2' },
@@ -29,6 +31,20 @@ const Layout = ({ children }) => {
   const getCurrentPageTitle = () => {
     const currentMenuItem = menuItems.find(item => item.path === location.pathname);
     return currentMenuItem ? currentMenuItem.text : 'Dashboard';
+  };
+
+  // Get current page description
+  const getCurrentPageDescription = () => {
+    switch (location.pathname) {
+      case '/dashboard':
+        return 'Monitor and manage your platform resources';
+      case '/resources':
+        return 'Manage and monitor your infrastructure resources';
+      case '/catalog':
+        return 'Browse and manage all services and applications';
+      default:
+        return 'Manage your platform components and services';
+    }
   };
 
   return (
@@ -85,11 +101,7 @@ const Layout = ({ children }) => {
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-gray-900">{getCurrentPageTitle()}</h1>
             <p className="mt-1 text-sm text-gray-500">
-              {location.pathname === '/dashboard' 
-                ? 'Monitor and manage your platform resources'
-                : location.pathname === '/resources'
-                ? 'Manage and monitor your infrastructure resources'
-                : 'Manage your platform components and services'}
+              {getCurrentPageDescription()}
             </p>
           </div>
 
