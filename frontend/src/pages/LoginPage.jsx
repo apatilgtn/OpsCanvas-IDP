@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Box, Cloud, Code, GitBranch } from 'lucide-react';
+import { Eye, EyeOff, Cloud, Code, GitBranch } from 'lucide-react';
+import OceanWaveLogo from '../components/OceanWaveLogo';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -73,15 +74,7 @@ const LoginPage = () => {
           {/* Logo and Title */}
           <div className="text-center">
             <div className="flex justify-center mb-6">
-              <div className="relative">
-                <Box className="h-16 w-16 text-blue-600" />
-                <div className="absolute -top-2 -right-2">
-                  <span className="flex h-4 w-4">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-500"></span>
-                  </span>
-                </div>
-              </div>
+              <OceanWaveLogo className="h-24 w-24" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900">OpsCanvas</h1>
             <p className="mt-2 text-gray-600">Cloud Operations Made Simple</p>

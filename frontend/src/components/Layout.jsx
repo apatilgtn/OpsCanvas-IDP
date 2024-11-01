@@ -12,6 +12,7 @@ import {
   Book
 } from 'lucide-react';
 import Header from './header/Header';
+import OceanWaveLogo from './OceanWaveLogo';
 
 const Layout = ({ children }) => {
   const location = useLocation();
@@ -56,7 +57,8 @@ const Layout = ({ children }) => {
       {/* Left Sidebar */}
       <div className="w-64 bg-white border-r border-gray-200 fixed h-full">
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 flex items-center">
+          <OceanWaveLogo className="h-6 w-6 mr-2" />
           <h1 className="text-xl font-bold text-gray-900">OpsCanvas</h1>
         </div>
 
