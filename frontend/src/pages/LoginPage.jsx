@@ -53,7 +53,7 @@ const LoginPage = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (credentials.email === 'demo@opscanvas.dev' && credentials.password === 'demo123') {
+      if (credentials.email === 'demo@cloudedge.dev' && credentials.password === 'demo123') {
         localStorage.setItem('isAuthenticated', 'true');
         navigate('/dashboard');
       } else {
@@ -177,7 +177,7 @@ const LoginPage = () => {
             {/* Demo Credentials */}
             <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100">
               <p className="font-semibold text-blue-900 mb-2">Demo Credentials:</p>
-              <p className="text-blue-800">Email: demo@opscanvas.dev</p>
+              <p className="text-blue-800">Email: demo@cloudedge.dev</p>
               <p className="text-blue-800">Password: demo123</p>
             </div>
           </form>

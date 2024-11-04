@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import OceanWaveLogo from '../components/OceanWaveLogo';
+import OceanWaveLogo from '../components/CloudEdgeLogo';
 
 const Home = () => {
   const navigate = useNavigate();
