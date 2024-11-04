@@ -11,7 +11,9 @@ import {
   Server,
   Book,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  GitBranch,
+  Activity
 } from 'lucide-react';
 import Header from './header/Header';
 import OceanWaveLogo from './OceanWaveLogo';
@@ -63,6 +65,17 @@ const Layout = ({ children }) => {
         { text: 'On-Premise', path: '/resources/onprem' }
       ]
     },
+    // New Pipeline Menu Item
+    {
+      icon: GitBranch,
+      text: 'CI/CD Pipelines',
+      path: '/pipelines',
+      subItems: [
+        { text: 'Pipeline Overview', path: '/pipelines' },
+        { text: 'Build History', path: '/pipelines/history' },
+        { text: 'Environments', path: '/pipelines/environments' }
+      ]
+    },
     { 
       icon: Package, 
       text: 'Systems', 
@@ -102,6 +115,12 @@ const Layout = ({ children }) => {
         return 'Browse and manage all services and applications';
       case '/docs':
         return 'Access and manage platform documentation';
+      case '/pipelines':
+        return 'Monitor and manage CI/CD pipelines and deployments';
+      case '/pipelines/history':
+        return 'View build and deployment history';
+      case '/pipelines/environments':
+        return 'Manage deployment environments';
       default:
         return 'Manage your platform components and services';
     }

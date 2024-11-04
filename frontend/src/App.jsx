@@ -1,11 +1,13 @@
+// src/App.jsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 import Resources from './pages/Resources';
 import ServiceCatalog from './pages/ServiceCatalog';
-import Layout from './components/Layout';
 import Documentation from './pages/Documentation';
+import CICDDashboard from './components/pipelines/CICDDashboard';
+import Layout from './components/Layout';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -30,6 +32,13 @@ const PublicRoute = ({ children }) => {
 const App = () => {
   return (
     <Routes>
+      {/* Default route redirects to login */}
+      <Route 
+        path="/" 
+        element={<Navigate to="/login" replace />} 
+      />
+      
+      {/* Login Route */}
       <Route 
         path="/login" 
         element={
@@ -38,6 +47,8 @@ const App = () => {
           </PublicRoute>
         } 
       />
+
+      {/* Protected Routes */}
       <Route 
         path="/dashboard" 
         element={
@@ -47,7 +58,7 @@ const App = () => {
         } 
       />
       <Route 
-        path="/resources" 
+        path="/resources/*" 
         element={
           <ProtectedRoute>
             <Resources />
@@ -55,7 +66,7 @@ const App = () => {
         } 
       />
       <Route 
-        path="/catalog" 
+        path="/catalog/*" 
         element={
           <ProtectedRoute>
             <ServiceCatalog />
@@ -70,7 +81,17 @@ const App = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route
+        path="/pipelines/*"
+        element={
+          <ProtectedRoute>
+            <CICDDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch all unmatched routes */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };
