@@ -8,6 +8,8 @@ import ServiceCatalog from './pages/ServiceCatalog';
 import Documentation from './pages/Documentation';
 import CICDDashboard from './components/pipelines/CICDDashboard';
 import Layout from './components/Layout';
+import KubernetesDashboard from './components/kubernetes/KubernetesDashboard';
+
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -89,6 +91,14 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/kubernetes/*"
+        element={
+         <ProtectedRoute>
+          <KubernetesDashboard />
+         </ProtectedRoute>
+        }
+        />
 
       {/* Catch all unmatched routes */}
       <Route path="*" element={<Navigate to="/login" replace />} />

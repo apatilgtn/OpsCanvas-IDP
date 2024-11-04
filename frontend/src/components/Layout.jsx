@@ -1,3 +1,4 @@
+// src/components/Layout.jsx
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -13,7 +14,9 @@ import {
   ChevronDown,
   ChevronUp,
   GitBranch,
-  Activity
+  Activity,
+  Cloud,
+  Box
 } from 'lucide-react';
 import Header from './header/Header';
 import OceanWaveLogo from './OceanWaveLogo';
@@ -35,6 +38,18 @@ const Layout = ({ children }) => {
       subItems: [
         { text: 'Services List', path: '/catalog/services' },
         { text: 'Service Metrics', path: '/catalog/metrics' }
+      ]
+    },
+    {
+      icon: Cloud,
+      text: 'Kubernetes',
+      path: '/kubernetes',
+      subItems: [
+        { text: 'Clusters', path: '/kubernetes/clusters' },
+        { text: 'Namespaces', path: '/kubernetes/namespaces' },
+        { text: 'Workloads', path: '/kubernetes/workloads' },
+        { text: 'Helm Charts', path: '/kubernetes/helm' },
+        { text: 'RBAC', path: '/kubernetes/rbac' }
       ]
     },
     { 
@@ -65,7 +80,6 @@ const Layout = ({ children }) => {
         { text: 'On-Premise', path: '/resources/onprem' }
       ]
     },
-    // New Pipeline Menu Item
     {
       icon: GitBranch,
       text: 'CI/CD Pipelines',
@@ -121,14 +135,38 @@ const Layout = ({ children }) => {
         return 'View build and deployment history';
       case '/pipelines/environments':
         return 'Manage deployment environments';
+      case '/kubernetes':
+      case '/kubernetes/clusters':
+        return 'Manage and monitor Kubernetes clusters';
+      case '/kubernetes/namespaces':
+        return 'Configure and manage Kubernetes namespaces';
+      case '/kubernetes/workloads':
+        return 'Monitor and manage Kubernetes workloads';
+      case '/kubernetes/helm':
+        return 'Manage Helm charts and releases';
+      case '/kubernetes/rbac':
+        return 'Configure Kubernetes role-based access control';
       default:
         return 'Manage your platform components and services';
     }
   };
 
+  const getEnvironmentStatus = () => {
+    const environments = {
+      production: { color: 'bg-green-500', text: 'Production Environment' },
+      staging: { color: 'bg-yellow-500', text: 'Staging Environment' },
+      development: { color: 'bg-blue-500', text: 'Development Environment' }
+    };
+
+    // You can add logic here to determine the current environment
+    return environments.production;
+  };
+
   const isPathActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(path + '/');
   };
+
+  const currentEnv = getEnvironmentStatus();
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -188,8 +226,8 @@ const Layout = ({ children }) => {
         {/* Environment Indicator */}
         <div className="absolute bottom-0 w-full p-4 border-t border-gray-200 bg-gray-50">
           <div className="flex items-center space-x-2">
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            <span className="text-sm text-gray-600">Production Environment</span>
+            <div className={`w-2 h-2 rounded-full ${currentEnv.color}`}></div>
+            <span className="text-sm text-gray-600">{currentEnv.text}</span>
           </div>
         </div>
       </div>
