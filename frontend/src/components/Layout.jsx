@@ -223,90 +223,64 @@ const Layout = ({ children }) => {
   const currentEnv = getEnvironmentStatus();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-[#f0f2f5]">
       {/* Sidebar */}
-      <div className="w-64 fixed inset-y-0 bg-black z-30">
+      <div className="w-56 fixed inset-y-0 bg-[#1a1f2a] z-30">
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-gray-800">
-          <CloudEdgeLogo className="h-8 w-8 text-blue-500" />
-          <div className="ml-3">
-            <h1 className="text-lg font-bold text-white">CloudEdgeOps</h1>
-            <span className="text-xs text-gray-400">Enterprise Edition</span>
+        <div className="h-14 flex items-center px-4 border-b border-[#2a3241]">
+          <CloudEdgeLogo className="h-6 w-6 text-blue-500" />
+          <div className="ml-2">
+            <h1 className="text-sm font-semibold text-white">CloudEdgeOps</h1>
+            <span className="text-[10px] text-gray-400">Enterprise Edition</span>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+        <nav className="flex-1 overflow-y-auto py-2 px-2 space-y-0.5">
           {menuItems.map((item, index) => (
             <div key={index}>
               <button
                 onClick={() => item.subItems && setExpandedSection(expandedSection === index ? null : index)}
                 className={`
-                  w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium
-                  rounded-lg transition-all duration-200 ease-out
-                  group hover:bg-gray-900/75
+                  w-full flex items-center justify-between px-3 py-2 text-xs font-medium
+                  rounded-md transition-all duration-200 ease-out
+                  group hover:bg-[#2a3241]
                   ${isPathActive(item.path)
-                    ? 'text-blue-400 bg-gray-900'
+                    ? 'text-blue-400 bg-[#2a3241]'
                     : 'text-gray-400 hover:text-gray-200'
                   }
                 `}
               >
                 <div className="flex items-center">
                   {item.CustomIcon ? (
-                    <item.CustomIcon 
-                      className={`w-5 h-5 mr-3 transition-colors duration-200 ${
-                        isPathActive(item.path) 
-                          ? 'text-blue-400' 
-                          : 'text-gray-500 group-hover:text-gray-400'
-                      }`}
-                    />
+                    <item.CustomIcon className="w-4 h-4 mr-2" />
                   ) : (
-                    <item.icon 
-                      className={`w-5 h-5 mr-3 transition-colors duration-200 ${
-                        isPathActive(item.path) 
-                          ? 'text-blue-400' 
-                          : 'text-gray-500 group-hover:text-gray-400'
-                      }`}
-                    />
+                    <item.icon className="w-4 h-4 mr-2" />
                   )}
                   <span>{item.text}</span>
                 </div>
                 {item.subItems && (
-                  <ChevronDown 
-                    className={`
-                      w-4 h-4 transition-transform duration-200
-                      ${expandedSection === index ? 'rotate-180' : ''}
-                      ${isPathActive(item.path) ? 'text-blue-400' : 'text-gray-600'}
-                    `}
-                  />
+                  <ChevronDown className="w-3 h-3" />
                 )}
               </button>
               
               {item.subItems && expandedSection === index && (
-                <div className="mt-1 ml-4 pl-4 border-l border-gray-800 space-y-1">
+                <div className="mt-0.5 ml-3 pl-3 border-l border-[#2a3241] space-y-0.5">
                   {item.subItems.map((subItem, subIndex) => (
                     <Link
                       key={subIndex}
                       to={subItem.path}
                       className={`
-                        flex items-center px-4 py-2 text-sm rounded-lg
+                        flex items-center px-3 py-1.5 text-xs rounded-md
                         transition-colors duration-150
                         ${location.pathname === subItem.path
-                          ? 'text-blue-400 bg-gray-900'
-                          : 'text-gray-400 hover:text-gray-200 hover:bg-gray-900/75'
+                          ? 'text-blue-400 bg-[#2a3241]'
+                          : 'text-gray-400 hover:text-gray-200 hover:bg-[#2a3241]'
                         }
                       `}
                     >
                       {subItem.icon && 
-                        <subItem.icon 
-                          className={`
-                            w-4 h-4 mr-2
-                            ${location.pathname === subItem.path
-                              ? 'text-blue-400'
-                              : 'text-gray-500'
-                            }
-                          `}
-                        />
+                        <subItem.icon className="w-3.5 h-3.5 mr-2" />
                       }
                       <span>{subItem.text}</span>
                     </Link>
@@ -318,31 +292,31 @@ const Layout = ({ children }) => {
         </nav>
 
         {/* Environment Selector */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-800 bg-gray-900 p-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-[#2a3241] bg-[#1e2330] p-3">
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${currentEnv.color}`}></div>
-            <span className="text-sm text-gray-400">{currentEnv.text}</span>
+            <div className={`w-1.5 h-1.5 rounded-full ${currentEnv.color}`}></div>
+            <span className="text-xs text-gray-400">{currentEnv.text}</span>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-64">
+      <div className="flex-1 ml-56">
         {/* Header */}
         <Header currentPage={getCurrentPageTitle()} />
 
         {/* Page Content */}
-        <main className="p-8 bg-gray-900 min-h-[calc(100vh-4rem)]">
+        <main className="p-6 bg-[#f0f2f5] min-h-[calc(100vh-3.5rem)]">
           {/* Page Title */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-white">{getCurrentPageTitle()}</h1>
-            <p className="mt-1 text-sm text-gray-400">
+          <div className="mb-4">
+            <h1 className="text-base font-semibold text-gray-900">{getCurrentPageTitle()}</h1>
+            <p className="mt-1 text-xs text-gray-500">
               {getCurrentPageDescription()}
             </p>
           </div>
 
           {/* Content Area */}
-          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             {children}
           </div>
         </main>
