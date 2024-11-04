@@ -7,9 +7,9 @@ import Resources from './pages/Resources';
 import ServiceCatalog from './pages/ServiceCatalog';
 import Documentation from './pages/Documentation';
 import CICDDashboard from './components/pipelines/CICDDashboard';
-import Layout from './components/Layout';
 import KubernetesDashboard from './components/kubernetes/KubernetesDashboard';
-
+import DockerManagement from './components/docker/DockerManagement';
+import Layout from './components/Layout';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -59,6 +59,7 @@ const App = () => {
           </ProtectedRoute>
         } 
       />
+
       <Route 
         path="/resources/*" 
         element={
@@ -67,6 +68,7 @@ const App = () => {
           </ProtectedRoute>
         } 
       />
+
       <Route 
         path="/catalog/*" 
         element={
@@ -75,6 +77,7 @@ const App = () => {
           </ProtectedRoute>
         } 
       />
+
       <Route
         path="/docs"
         element={
@@ -83,6 +86,7 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/pipelines/*"
         element={
@@ -91,14 +95,24 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/kubernetes/*"
         element={
-         <ProtectedRoute>
-          <KubernetesDashboard />
-         </ProtectedRoute>
+          <ProtectedRoute>
+            <KubernetesDashboard />
+          </ProtectedRoute>
         }
-        />
+      />
+
+      <Route
+        path="/docker/*"
+        element={
+          <ProtectedRoute>
+            <DockerManagement />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Catch all unmatched routes */}
       <Route path="*" element={<Navigate to="/login" replace />} />

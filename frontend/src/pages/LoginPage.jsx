@@ -76,8 +76,8 @@ const LoginPage = () => {
             <div className="flex justify-center mb-6">
               <OceanWaveLogo className="h-24 w-24" />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">OpsCanvas</h1>
-            <p className="mt-2 text-gray-600">Cloud Operations Made Simple</p>
+            <h1 className="text-4xl font-bold text-gray-900">CloudEdgeOps</h1>
+            <p className="mt-2 text-gray-600">Enterprise Cloud Operations Platform</p>
           </div>
 
           {/* Login Form */}
