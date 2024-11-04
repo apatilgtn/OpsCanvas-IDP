@@ -225,13 +225,13 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <div className="w-64 fixed inset-y-0 border-r border-gray-200 bg-white z-30">
+      <div className="w-64 fixed inset-y-0 bg-black z-30">
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-gray-200">
-          <CloudEdgeLogo className="h-8 w-8 text-blue-600" />
+        <div className="h-16 flex items-center px-6 border-b border-gray-800">
+          <CloudEdgeLogo className="h-8 w-8 text-blue-500" />
           <div className="ml-3">
-            <h1 className="text-lg font-bold text-gray-900">CloudEdgeOps</h1>
-            <span className="text-xs text-gray-500">Enterprise Edition</span>
+            <h1 className="text-lg font-bold text-white">CloudEdgeOps</h1>
+            <span className="text-xs text-gray-400">Enterprise Edition</span>
           </div>
         </div>
 
@@ -244,10 +244,10 @@ const Layout = ({ children }) => {
                 className={`
                   w-full flex items-center justify-between px-4 py-2.5 text-sm font-medium
                   rounded-lg transition-all duration-200 ease-out
-                  group hover:bg-gray-50
+                  group hover:bg-gray-900/75
                   ${isPathActive(item.path)
-                    ? 'text-blue-600 bg-blue-50/80'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'text-blue-400 bg-gray-900'
+                    : 'text-gray-400 hover:text-gray-200'
                   }
                 `}
               >
@@ -256,16 +256,16 @@ const Layout = ({ children }) => {
                     <item.CustomIcon 
                       className={`w-5 h-5 mr-3 transition-colors duration-200 ${
                         isPathActive(item.path) 
-                          ? item.iconClassName 
-                          : 'text-gray-400 group-hover:text-gray-600'
+                          ? 'text-blue-400' 
+                          : 'text-gray-500 group-hover:text-gray-400'
                       }`}
                     />
                   ) : (
                     <item.icon 
                       className={`w-5 h-5 mr-3 transition-colors duration-200 ${
                         isPathActive(item.path) 
-                          ? item.iconClassName 
-                          : 'text-gray-400 group-hover:text-gray-600'
+                          ? 'text-blue-400' 
+                          : 'text-gray-500 group-hover:text-gray-400'
                       }`}
                     />
                   )}
@@ -274,15 +274,16 @@ const Layout = ({ children }) => {
                 {item.subItems && (
                   <ChevronDown 
                     className={`
-                      w-4 h-4 text-gray-400 transition-transform duration-200
+                      w-4 h-4 transition-transform duration-200
                       ${expandedSection === index ? 'rotate-180' : ''}
+                      ${isPathActive(item.path) ? 'text-blue-400' : 'text-gray-600'}
                     `}
                   />
                 )}
               </button>
               
               {item.subItems && expandedSection === index && (
-                <div className="mt-1 ml-4 pl-4 border-l border-gray-200 space-y-1">
+                <div className="mt-1 ml-4 pl-4 border-l border-gray-800 space-y-1">
                   {item.subItems.map((subItem, subIndex) => (
                     <Link
                       key={subIndex}
@@ -291,8 +292,8 @@ const Layout = ({ children }) => {
                         flex items-center px-4 py-2 text-sm rounded-lg
                         transition-colors duration-150
                         ${location.pathname === subItem.path
-                          ? 'text-blue-600 bg-blue-50/60'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                          ? 'text-blue-400 bg-gray-900'
+                          : 'text-gray-400 hover:text-gray-200 hover:bg-gray-900/75'
                         }
                       `}
                     >
@@ -301,8 +302,8 @@ const Layout = ({ children }) => {
                           className={`
                             w-4 h-4 mr-2
                             ${location.pathname === subItem.path
-                              ? 'text-blue-500'
-                              : 'text-gray-400'
+                              ? 'text-blue-400'
+                              : 'text-gray-500'
                             }
                           `}
                         />
@@ -317,10 +318,10 @@ const Layout = ({ children }) => {
         </nav>
 
         {/* Environment Selector */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 bg-white p-4">
+        <div className="absolute bottom-0 left-0 right-0 border-t border-gray-800 bg-gray-900 p-4">
           <div className="flex items-center space-x-2">
             <div className={`w-2 h-2 rounded-full ${currentEnv.color}`}></div>
-            <span className="text-sm text-gray-600">{currentEnv.text}</span>
+            <span className="text-sm text-gray-400">{currentEnv.text}</span>
           </div>
         </div>
       </div>
@@ -331,17 +332,17 @@ const Layout = ({ children }) => {
         <Header currentPage={getCurrentPageTitle()} />
 
         {/* Page Content */}
-        <main className="p-8 bg-gray-50 min-h-[calc(100vh-4rem)]">
+        <main className="p-8 bg-gray-900 min-h-[calc(100vh-4rem)]">
           {/* Page Title */}
           <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">{getCurrentPageTitle()}</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <h1 className="text-2xl font-semibold text-white">{getCurrentPageTitle()}</h1>
+            <p className="mt-1 text-sm text-gray-400">
               {getCurrentPageDescription()}
             </p>
           </div>
 
           {/* Content Area */}
-          <div className="bg-white rounded-lg border border-gray-200">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
             {children}
           </div>
         </main>
