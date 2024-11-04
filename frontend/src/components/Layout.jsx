@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -9,21 +9,69 @@ import {
   Shield,
   Settings,
   Server,
-  Book
+  Book,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import Header from './header/Header';
 import OceanWaveLogo from './OceanWaveLogo';
 
 const Layout = ({ children }) => {
   const location = useLocation();
+  const [expandedSection, setExpandedSection] = useState(null);
 
   const menuItems = [
-    { icon: LayoutDashboard, text: 'Overview', path: '/dashboard' },
-    { icon: Server, text: 'Service Catalog', path: '/catalog', count: '2' },
-    { icon: Package, text: 'Components', path: '/components', count: '3' },
-    { icon: Code, text: 'APIs', path: '/apis', count: '2' },
-    { icon: Database, text: 'Resources', path: '/resources', count: '2' },
-    { icon: Package, text: 'Systems', path: '/systems', count: '2' },
+    { 
+      icon: LayoutDashboard, 
+      text: 'Overview', 
+      path: '/dashboard'
+    },
+    { 
+      icon: Server, 
+      text: 'Service Catalog', 
+      path: '/catalog',
+      subItems: [
+        { text: 'Services List', path: '/catalog/services' },
+        { text: 'Service Metrics', path: '/catalog/metrics' }
+      ]
+    },
+    { 
+      icon: Package, 
+      text: 'Components', 
+      path: '/components',
+      subItems: [
+        { text: 'UI Components', path: '/components/ui' },
+        { text: 'Backend Components', path: '/components/backend' },
+        { text: 'Infrastructure', path: '/components/infrastructure' }
+      ]
+    },
+    { 
+      icon: Code, 
+      text: 'APIs', 
+      path: '/apis',
+      subItems: [
+        { text: 'API Documentation', path: '/apis/docs' },
+        { text: 'API Testing', path: '/apis/testing' }
+      ]
+    },
+    { 
+      icon: Database, 
+      text: 'Resources', 
+      path: '/resources',
+      subItems: [
+        { text: 'Cloud Resources', path: '/resources/cloud' },
+        { text: 'On-Premise', path: '/resources/onprem' }
+      ]
+    },
+    { 
+      icon: Package, 
+      text: 'Systems', 
+      path: '/systems',
+      subItems: [
+        { text: 'System Status', path: '/systems/status' },
+        { text: 'System Metrics', path: '/systems/metrics' }
+      ]
+    },
     { icon: Users, text: 'Teams', path: '/teams' },
     { icon: Shield, text: 'Security', path: '/security' },
     { icon: Book, text: 'Documentation', path: '/docs' },
@@ -32,7 +80,14 @@ const Layout = ({ children }) => {
 
   // Get current page title based on path
   const getCurrentPageTitle = () => {
-    const currentMenuItem = menuItems.find(item => item.path === location.pathname);
+    const currentPath = location.pathname;
+    const currentMenuItem = menuItems.find(item => {
+      if (item.path === currentPath) return true;
+      if (item.subItems) {
+        return item.subItems.some(subItem => subItem.path === currentPath);
+      }
+      return false;
+    });
     return currentMenuItem ? currentMenuItem.text : 'Dashboard';
   };
 
@@ -52,10 +107,14 @@ const Layout = ({ children }) => {
     }
   };
 
+  const isPathActive = (path) => {
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Left Sidebar */}
-      <div className="w-64 bg-white border-r border-gray-200 fixed h-full">
+      <div className="w-64 bg-white border-r border-gray-200 fixed h-full overflow-y-auto">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200 flex items-center">
           <OceanWaveLogo className="h-6 w-6 mr-2" />
@@ -65,25 +124,45 @@ const Layout = ({ children }) => {
         {/* Navigation Menu */}
         <nav className="mt-4 flex flex-col">
           {menuItems.map((item, index) => (
-            <Link
-              key={index}
-              to={item.path}
-              className={`flex items-center justify-between px-6 py-2 text-sm font-medium transition-colors duration-150 ${
-                location.pathname === item.path
-                  ? 'text-blue-600 bg-blue-50'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center">
-                <item.icon className="w-5 h-5 mr-3" />
-                <span>{item.text}</span>
-              </div>
-              {item.count && (
-                <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs">
-                  {item.count}
-                </span>
+            <div key={index} className="flex flex-col">
+              <button
+                onClick={() => item.subItems && setExpandedSection(expandedSection === index ? null : index)}
+                className={`flex items-center justify-between px-6 py-3 text-sm font-medium transition-colors duration-150 ${
+                  isPathActive(item.path)
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center">
+                  <item.icon className="w-5 h-5 mr-3" />
+                  <span>{item.text}</span>
+                </div>
+                {item.subItems && (
+                  expandedSection === index ? 
+                    <ChevronUp className="w-4 h-4" /> : 
+                    <ChevronDown className="w-4 h-4" />
+                )}
+              </button>
+              
+              {/* Submenu Items */}
+              {item.subItems && expandedSection === index && (
+                <div className="bg-gray-50 pl-14 py-2">
+                  {item.subItems.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      to={subItem.path}
+                      className={`block py-2 text-sm transition-colors duration-150 ${
+                        location.pathname === subItem.path
+                          ? 'text-blue-600'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      {subItem.text}
+                    </Link>
+                  ))}
+                </div>
               )}
-            </Link>
+            </div>
           ))}
         </nav>
 
