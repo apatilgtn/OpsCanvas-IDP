@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import { 
   LayoutGrid,
   Box,
@@ -9,48 +10,88 @@ import {
   Users,
   Shield,
   FileText,
-  Settings
+  Settings,
+  ChevronDown,
+  MonitorDot,
+  Cloud,
+  Activity
 } from 'lucide-react';
+import CloudEdgeLogo from './CloudEdgeLogo';
 
 const SidebarMenu = () => {
-  const [activeItem, setActiveItem] = useState('Overview');
+  const location = useLocation();
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
   
   const menuItems = [
-    { name: 'Overview', icon: LayoutGrid },
-    { name: 'Service Catalog', icon: Box },
-    { name: 'Components', icon: Component },
-    { name: 'APIs', icon: Code2 },
-    { name: 'Resources', icon: Database },
-    { name: 'Systems', icon: Server },
-    { name: 'Teams', icon: Users },
-    { name: 'Security', icon: Shield },
-    { name: 'Documentation', icon: FileText },
-    { name: 'Settings', icon: Settings }
+    { 
+      name: 'Overview', 
+      icon: LayoutGrid,
+      path: '/dashboard',
+    },
+    { 
+      name: 'Service Catalog', 
+      icon: Box,
+      path: '/catalog',
+      subItems: [
+        { name: 'Services', icon: MonitorDot, path: '/catalog/services' },
+        { name: 'Metrics', icon: Activity, path: '/catalog/metrics' }
+      ]
+    },
+    { 
+      name: 'Components', 
+      icon: Component,
+      path: '/components',
+      subItems: [
+        { name: 'UI Components', icon: Box, path: '/components/ui' },
+        { name: 'Backend Services', icon: Server, path: '/components/backend' }
+      ]
+    },
+    { 
+      name: 'APIs', 
+      icon: Code2,
+      path: '/apis' 
+    },
+    { 
+      name: 'Resources', 
+      icon: Database,
+      path: '/resources',
+      subItems: [
+        { name: 'Cloud Resources', icon: Cloud, path: '/resources/cloud' },
+        { name: 'On-Premise', icon: Server, path: '/resources/onprem' }
+      ]
+    },
+    { 
+      name: 'Infrastructure', 
+      icon: Server,
+      path: '/infrastructure' 
+    },
+    { 
+      name: 'Teams', 
+      icon: Users,
+      path: '/teams' 
+    },
+    { 
+      name: 'Security', 
+      icon: Shield,
+      path: '/security' 
+    },
+    { 
+      name: 'Documentation', 
+      icon: FileText,
+      path: '/docs' 
+    },
+    { 
+      name: 'Settings', 
+      icon: Settings,
+      path: '/settings' 
+    }
   ];
 
-  return (
-    <div className="w-64 min-h-screen bg-gray-50 border-r border-gray-200">
-      <nav className="p-4">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <button
-              key={item.name}
-              onClick={() => setActiveItem(item.name)}
-              className={`w-full flex items-center px-4 py-2 my-1 rounded-lg text-sm transition-colors duration-150 ${
-                activeItem === item.name
-                  ? 'bg-blue-100 text-blue-600'
-                  : 'text-gray-600 hover:bg-gray-100'
-              }`}
-            >
-              <Icon size={18} className="mr-3" />
-              <span>{item.name}</span>
-            </button>
-          );
-        })}
-      </nav>
-    </div>
-  );
-};
+  const isPathActive = (path: string) => {
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  };
 
-export default SidebarMenu;
+  return (
+    <div className="w-56 min-h-screen bg-[#1a1f2a] border-r border-gray-800">
+      {/* Logo */}
+      <div className="h-14 flex items
