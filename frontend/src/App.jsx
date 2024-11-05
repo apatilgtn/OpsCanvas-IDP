@@ -8,6 +8,11 @@ import Documentation from './pages/Documentation';
 import CICDDashboard from './components/pipelines/CICDDashboard';
 import KubernetesDashboard from './components/kubernetes/KubernetesDashboard';
 import DockerManagement from './components/docker/DockerManagement';
+import APIManagementPage from './pages/api-management/APIManagementPage';
+import APIDocumentation from './pages/api-management/components/APIDocumentation';
+import APIPlayground from './pages/api-management/components/APIPlayground';
+import APIMetrics from './pages/api-management/components/APIMetrics'; 
+import APISettings from './pages/api-management/components/APISettings';
 import Layout from './components/Layout';
 
 const ProtectedRoute = ({ children }) => {
@@ -83,6 +88,53 @@ const App = () => {
         element={
           <ProtectedRoute>
             <Documentation />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* API Management Routes */}
+      <Route
+        path="/apis"
+        element={
+          <ProtectedRoute>
+            <APIManagementPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* API Detail Routes */}
+      <Route
+        path="/apis/:apiId/docs"
+        element={
+          <ProtectedRoute>
+            <APIDocumentation />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/apis/:apiId/playground"
+        element={
+          <ProtectedRoute>
+            <APIPlayground />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/apis/:apiId/metrics"
+        element={
+          <ProtectedRoute>
+            <APIMetrics />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/apis/:apiId/settings"
+        element={
+          <ProtectedRoute>
+            <APISettings />
           </ProtectedRoute>
         }
       />
