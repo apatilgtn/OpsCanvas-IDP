@@ -1,22 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
-const useClickOutside = (ref, handler) => {
+export const useClickOutside = (handler) => {
+  const ref = useRef();
+
   useEffect(() => {
-    const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        handler();
       }
-      handler(event);
     };
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-
+    // Add event listener when the component mounts
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    // Clean up event listener when component unmounts
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [ref, handler]);
-};
+  }, [handler]);
 
-export default useClickOutside;
+  return ref;
+};

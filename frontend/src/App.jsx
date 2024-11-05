@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
@@ -40,7 +39,6 @@ const App = () => {
         element={<Navigate to="/login" replace />} 
       />
       
-      {/* Login Route */}
       <Route 
         path="/login" 
         element={
@@ -51,6 +49,8 @@ const App = () => {
       />
 
       {/* Protected Routes */}
+      <Route path="/*" element={<Navigate to="/login" replace />} />
+      
       <Route 
         path="/dashboard" 
         element={
@@ -113,9 +113,6 @@ const App = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Catch all unmatched routes */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
 };
